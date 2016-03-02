@@ -45,15 +45,7 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:TmuxSend(config, text)
-  let l:prefix = "tmux -L " . shellescape(a:config["socket_name"])
-  " use STDIN unless configured to use a file
-  if !exists("g:slime_paste_file")
-    call system(l:prefix . " load-buffer -", a:text)
-  else
-    call s:WritePasteFile(a:text)
-    call system(l:prefix . " load-buffer " . g:slime_paste_file)
-  end
-  call system(l:prefix . " paste-buffer -d -t " . shellescape(a:config["target_pane"]))
+  call system("tmux send-keys -t " . a:config["socket_name"] . " \"" . a:text . "\"")
 endfunction
 
 function! s:TmuxPaneNames(A,L,P)
@@ -232,11 +224,11 @@ noremap <unique> <script> <silent> <Plug>SlimeConfig :<c-u>SlimeConfig<cr>
 
 if !exists("g:slime_no_mappings") || !g:slime_no_mappings
   if !hasmapto('<Plug>SlimeRegionSend', 'x')
-    xmap <c-c><c-c> <Plug>SlimeRegionSend
+    xmap <Esc>u <Plug>SlimeRegionSend
   endif
 
   if !hasmapto('<Plug>SlimeParagraphSend', 'n')
-    nmap <c-c><c-c> <Plug>SlimeParagraphSend
+    nmap <Esc>u <Plug>SlimeParagraphSend
   endif
 
   if !hasmapto('<Plug>SlimeConfig', 'n')
