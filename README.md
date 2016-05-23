@@ -1,11 +1,6 @@
-vim-slime
-=========
+# vim-slime
 
-Demo
-------------
-
-![vim-slime session with R](assets/vim-slime.gif)
-
+## Fork of jpalardy/vim-slime.
 
 What is Vim-Slime?
 ------------------
