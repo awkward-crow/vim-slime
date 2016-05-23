@@ -1,4 +1,3 @@
-
 if exists('g:loaded_slime') || &cp || v:version < 700
   finish
 endif
@@ -45,7 +44,18 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:TmuxSend(config, text)
+  " my 'improvement'
   call system("tmux send-keys -t " . a:config["socket_name"] . " \"" . a:text . "\"")
+  " the original
+"   let l:prefix = "tmux -L " . shellescape(a:config["socket_name"])
+"   " use STDIN unless configured to use a file
+"   if !exists("g:slime_paste_file")
+"     call system(l:prefix . " load-buffer -", a:text)
+"   else
+"     call s:WritePasteFile(a:text)
+"     call system(l:prefix . " load-buffer " . g:slime_paste_file)
+"   end
+"   call system(l:prefix . " paste-buffer -d -t " . shellescape(a:config["target_pane"]))
 endfunction
 
 function! s:TmuxPaneNames(A,L,P)
@@ -96,8 +106,10 @@ endfunction
 
 function! s:_EscapeText(text)
   if exists("&filetype")
+"     echo "&filetype" . &filetype
     let custom_escape = "_EscapeText_" . substitute(&filetype, "[.]", "_", "g")
     if exists("*" . custom_escape)
+"       echo "custom"
       let result = call(custom_escape, [a:text])
     end
   end
@@ -109,8 +121,10 @@ function! s:_EscapeText(text)
 
   " return an array, regardless
   if type(result) == type("")
+"     echo [result]
     return [result]
   else
+"     echo result
     return result
   end
 endfunction
@@ -225,10 +239,12 @@ noremap <unique> <script> <silent> <Plug>SlimeConfig :<c-u>SlimeConfig<cr>
 if !exists("g:slime_no_mappings") || !g:slime_no_mappings
   if !hasmapto('<Plug>SlimeRegionSend', 'x')
     xmap <Esc>u <Plug>SlimeRegionSend
+    " xmap <c-c><c-c> <Plug>SlimeRegionSend
   endif
 
   if !hasmapto('<Plug>SlimeParagraphSend', 'n')
     nmap <Esc>u <Plug>SlimeParagraphSend
+    " nmap <c-c><c-c> <Plug>SlimeParagraphSend
   endif
 
   if !hasmapto('<Plug>SlimeConfig', 'n')
