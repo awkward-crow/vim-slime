@@ -51,7 +51,7 @@ endfunction
 
 function! s:XdotoolSend(config, text)
   " let r = system('xsel -o | xdotool type --window ' . w . ' --delay 0 --file -')
-  call system("xsel -o | xdotool type --window " . shellescape(a:config["window_id"]) . " --delay 0 --file -")
+  call system("echo " . a:text . " | xdotool type --window " . shellescape(a:config["window_id"]) . " --delay 0 --file -")
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
