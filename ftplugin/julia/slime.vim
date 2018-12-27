@@ -1,4 +1,4 @@
-function! _EscapeText_r(text)
+function! _EscapeText_julia(text)
     let s = substitute(a:text, '\$', '\\$', "g")
     let t = substitute(s, '"', '\\"', "g")
 "     echo [t]
