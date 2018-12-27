@@ -39,6 +39,16 @@ function! s:ScreenConfig() abort
   let b:slime_config["windowname"]  = input("screen window name: ",  b:slime_config["windowname"])
 endfunction
 
+"""""""""
+" Xdotool 
+"""""""""
+
+function! s:XdotoolConfig() abort
+  " let w = system("xdotool selectwindow | tr -d '\n'")
+  let b:slime_config["window_id"] = system("xdotool selectwindow | tr -d '\n'")
+endfunction
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Tmux
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -238,12 +248,12 @@ noremap <unique> <script> <silent> <Plug>SlimeConfig :<c-u>SlimeConfig<cr>
 
 if !exists("g:slime_no_mappings") || !g:slime_no_mappings
   if !hasmapto('<Plug>SlimeRegionSend', 'x')
-    xmap <Esc>u <Plug>SlimeRegionSend
+    xmap <M-u> <Plug>SlimeRegionSend
     " xmap <c-c><c-c> <Plug>SlimeRegionSend
   endif
 
   if !hasmapto('<Plug>SlimeParagraphSend', 'n')
-    nmap <Esc>u <Plug>SlimeParagraphSend
+    nmap <M-u> <Plug>SlimeParagraphSend
     " nmap <c-c><c-c> <Plug>SlimeParagraphSend
   endif
 
