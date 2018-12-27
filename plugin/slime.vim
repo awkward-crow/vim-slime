@@ -44,10 +44,15 @@ endfunction
 """""""""
 
 function! s:XdotoolConfig() abort
+  echo "xdotool config"
   " let w = system("xdotool selectwindow | tr -d '\n'")
   let b:slime_config["window_id"] = system("xdotool selectwindow | tr -d '\n'")
 endfunction
 
+function! s:XdotoolSend(config, text)
+  " let r = system('xsel -o | xdotool type --window ' . w . ' --delay 0 --file -')
+  call system("xsel -o | xdotool type --window " . shellescape(a:config["window_id"]) . " --delay 0 --file -")
+endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Tmux
