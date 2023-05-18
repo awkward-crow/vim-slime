@@ -348,7 +348,7 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:X11Send(config, text)
-  call system("xdotool type --delay 0 --window " . shellescape(b:slime_config["window_id"]) . " -- " . shellescape(a:text))
+  call system("xdotool type --delay 0.2 --window " . shellescape(b:slime_config["window_id"]) . " -- " . shellescape(a:text))
 endfunction
 
 function! s:X11Config() abort
