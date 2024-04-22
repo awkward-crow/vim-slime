@@ -25,11 +25,13 @@ noremap <unique> <script> <silent> <Plug>SlimeSendCell :<c-u>call slime#send_cel
 if !exists("g:slime_no_mappings") || !g:slime_no_mappings
   if !hasmapto('<Plug>SlimeRegionSend', 'x')
     xmap <M-u> <Plug>SlimeRegionSend
+    xmap <M-Enter> <Plug>SlimeRegionSend
     " xmap <c-c><c-c> <Plug>SlimeRegionSend
   endif
 
   if !hasmapto('<Plug>SlimeParagraphSend', 'n')
     nmap <M-u> <Plug>SlimeParagraphSend
+    nmap <M-Enter> <Plug>SlimeParagraphSend
     " nmap <c-c><c-c> <Plug>SlimeParagraphSend
   endif
 
