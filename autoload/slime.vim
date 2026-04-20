@@ -45,11 +45,34 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:KittySend(config, text)
+  if exists("b:slime_bracketed_paste")
+    let bracketed_paste = b:slime_bracketed_paste
+  elseif exists("g:slime_bracketed_paste")
+    let bracketed_paste = g:slime_bracketed_paste
+  else
+    let bracketed_paste = 0
+  endif
+
   let to_flag = ""
   if a:config["listen_on"] != ""
     let to_flag = " --to " . shellescape(a:config["listen_on"])
   end
-  call system("kitty @" . to_flag . " send-text --match id:" . shellescape(a:config["window_id"]) . " --stdin", a:text)
+
+  let [text_to_paste, has_crlf] = [a:text, 0]
+  if bracketed_paste
+    if a:text[-2:] == "\r\n"
+      let [text_to_paste, has_crlf] = [a:text[:-3], 1]
+    elseif a:text[-1:] == "\r" || a:text[-1:] == "\n"
+      let [text_to_paste, has_crlf] = [a:text[:-2], 1]
+    endif
+    let text_to_paste = "\x1b[200~" . text_to_paste . "\x1b[201~"
+  endif
+
+  call system("kitty @" . to_flag . " send-text --match id:" . shellescape(a:config["window_id"]) . " --stdin", text_to_paste)
+
+  if bracketed_paste && has_crlf
+    call system("kitty @" . to_flag . " send-text --match id:" . shellescape(a:config["window_id"]) . " --stdin", "\n")
+  endif
 endfunction
 
 function! s:KittyConfig() abort
@@ -348,7 +371,7 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:X11Send(config, text)
-  call system("xdotool type --delay 0.2 --window " . shellescape(b:slime_config["window_id"]) . " -- " . shellescape(a:text))
+  call system("xdotool sleep 0.6 type --delay 0 --window " . shellescape(b:slime_config["window_id"]) . " -- " . shellescape(a:text))
 endfunction
 
 function! s:X11Config() abort
